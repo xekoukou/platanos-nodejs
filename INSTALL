@@ -1,0 +1,4 @@
+this server only loads the index file
+all js code must be placed inside the js folder, not a subfolder
+
+One must also create a certificate before.
