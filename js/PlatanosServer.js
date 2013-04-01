@@ -11,7 +11,7 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2,$3;
 uri=_st(_st(self["@url"])._parse_(_st(aRequest)._url()))._pathname();
 _st(console)._log_(uri);
-$1=_st(uri).__eq("/index.html");
+$1=_st(_st(_st(uri).__eq("/index.html")).__or(_st(uri).__eq("/"))).__or(_st(uri).__eq(""));
 if(smalltalk.assert($1)){
 _st(self["@fs"])._exists_do_("./index.html",(function(aBoolean){
 return smalltalk.withContext(function($ctx2) {
@@ -37,8 +37,8 @@ return _st(self)._respondNotFoundTo_(aResponse);
 };
 return self}, function($ctx1) {$ctx1.fill(self,"handleGETRequest:respondTo:",{aRequest:aRequest,aResponse:aResponse,uri:uri,filename:filename},smalltalk.PlatanosServer)})},
 args: ["aRequest", "aResponse"],
-source: "handleGETRequest: aRequest respondTo: aResponse\x0a\x09| uri filename |\x0a\x09uri := (url parse: aRequest url) pathname.\x0a\x09console log: uri.\x0a\x09uri = '/index.html'\x0a\x09\x09ifTrue: [\x0a\x09\x09fs exists: './index.html' do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondIndex: aResponse]]\x0a\x09\x09\x09\x09]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09 filename := './js/',(path basename: uri).\x0a\x09\x09\x09 fs exists: filename do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondJS: filename to: aResponse]]\x0a\x09\x09\x09\x09\x0a\x09\x09\x09] ",
-messageSends: ["pathname", "parse:", "url", "log:", "ifTrue:ifFalse:", "exists:do:", "ifFalse:ifTrue:", "respondNotFoundTo:", "respondIndex:", ",", "basename:", "respondJS:to:", "="],
+source: "handleGETRequest: aRequest respondTo: aResponse\x0a\x09| uri filename |\x0a\x09uri := (url parse: aRequest url) pathname.\x0a\x09console log: uri.\x0a\x09((uri = '/index.html') | (uri = '/') | (uri = ''))\x0a\x09\x09ifTrue: [\x0a\x09\x09fs exists: './index.html' do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondIndex: aResponse]]\x0a\x09\x09\x09\x09]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09 filename := './js/',(path basename: uri).\x0a\x09\x09\x09 fs exists: filename do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondJS: filename to: aResponse]]\x0a\x09\x09\x09\x09\x0a\x09\x09\x09] ",
+messageSends: ["pathname", "parse:", "url", "log:", "ifTrue:ifFalse:", "exists:do:", "ifFalse:ifTrue:", "respondNotFoundTo:", "respondIndex:", ",", "basename:", "respondJS:to:", "|", "="],
 referencedClasses: []
 }),
 smalltalk.PlatanosServer);
@@ -237,6 +237,51 @@ return self}, function($ctx1) {$ctx1.fill(self,"respondNotFoundTo:",{aResponse:a
 args: ["aResponse"],
 source: "respondNotFoundTo: aResponse\x0a\x09aResponse \x0a\x09\x09writeHead: 404 options: #{'Content-Type' -> 'text/plain'};\x0a\x09\x09write: '404 Not found';\x0a\x09\x09end",
 messageSends: ["writeHead:options:", "->", "write:", "end"],
+referencedClasses: []
+}),
+smalltalk.PlatanosServer);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "respondTo:with:",
+category: 'request handling',
+fn: function (aRequest,aResponce){
+var self=this;
+var string;
+function $JSON(){return smalltalk.JSON||(typeof JSON=="undefined"?nil:JSON)}
+return smalltalk.withContext(function($ctx1) { 
+string="";
+_st(aRequest)._on_do_("data",(function(data){
+return smalltalk.withContext(function($ctx2) {
+string=_st(string).__comma(data);
+return string;
+}, function($ctx2) {$ctx2.fillBlock({data:data},$ctx1)})}));
+_st(aRequest)._on_do_("end",(function(){
+var json;
+return smalltalk.withContext(function($ctx2) {
+json=_st($JSON())._parse_(string);
+json;
+return _st(self)._route_to_(json,aResponce);
+}, function($ctx2) {$ctx2.fillBlock({json:json},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"respondTo:with:",{aRequest:aRequest,aResponce:aResponce,string:string},smalltalk.PlatanosServer)})},
+args: ["aRequest", "aResponce"],
+source: "respondTo: aRequest with: aResponce\x0a\x0a|string|\x0astring :=''.\x0aaRequest on: 'data' do: [:data|string := string,data.].\x0a\x0aaRequest on: 'end' do:[ |json| json := JSON parse: string. self route: json to: aResponce ].",
+messageSends: ["on:do:", ",", "parse:", "route:to:"],
+referencedClasses: ["JSON"]
+}),
+smalltalk.PlatanosServer);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "route:to:",
+category: 'request handling',
+fn: function (aJson,aResponce){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"route:to:",{aJson:aJson,aResponce:aResponce},smalltalk.PlatanosServer)})},
+args: ["aJson", "aResponce"],
+source: "route: aJson to: aResponce \x0a ",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.PlatanosServer);

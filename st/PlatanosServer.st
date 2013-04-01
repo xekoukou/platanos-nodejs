@@ -44,7 +44,7 @@ handleGETRequest: aRequest respondTo: aResponse
 	| uri filename |
 	uri := (url parse: aRequest url) pathname.
 	console log: uri.
-	uri = '/index.html'
+	((uri = '/index.html') | (uri = '/') | (uri = ''))
 		ifTrue: [
 		fs exists: './index.html' do: [:aBoolean |
 			aBoolean
@@ -117,6 +117,18 @@ respondNotFoundTo: aResponse
 		writeHead: 404 options: #{'Content-Type' -> 'text/plain'};
 		write: '404 Not found';
 		end
+!
+
+respondTo: aRequest with: aResponce
+
+|string|
+string :=''.
+aRequest on: 'data' do: [:data|string := string,data.].
+
+aRequest on: 'end' do:[ |json| json := JSON parse: string. self route: json to: aResponce ].
+!
+
+route: aJson to: aResponce
 ! !
 
 !PlatanosServer class methodsFor: 'not yet classified'!
