@@ -1,0 +1,3 @@
+[submodule "packages/platanosJsCommon"]
+	path = packages/platanosJsCommon
+	url = https://github.com/xekoukou/platanosJsCommon.git

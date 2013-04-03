@@ -224,6 +224,28 @@ smalltalk.PlatanosServer);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "respondJson:to:",
+category: 'request handling',
+fn: function (aJson,aResponce){
+var self=this;
+var type;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+type="text/html;charset=utf-8";
+$1=aResponce;
+_st($1)._writeHead_options_((200),smalltalk.HashedCollection._fromPairs_([_st("Content-Type").__minus_gt(type)]));
+_st($1)._write_(_st(aJson)._stringify());
+$2=_st($1)._end();
+return self}, function($ctx1) {$ctx1.fill(self,"respondJson:to:",{aJson:aJson,aResponce:aResponce,type:type},smalltalk.PlatanosServer)})},
+args: ["aJson", "aResponce"],
+source: "respondJson: aJson to: aResponce\x0a\x0a|type|\x0a\x0atype:='text/html;charset=utf-8'.\x0aaResponce \x0a\x09writeHead: 200 options:  #{'Content-Type' -> type};\x0a\x09write: (aJson stringify);\x0a\x09end",
+messageSends: ["writeHead:options:", "->", "write:", "stringify", "end"],
+referencedClasses: []
+}),
+smalltalk.PlatanosServer);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "respondNotFoundTo:",
 category: 'request handling',
 fn: function (aResponse){
@@ -325,5 +347,112 @@ messageSends: ["start", "new"],
 referencedClasses: []
 }),
 smalltalk.PlatanosServer.klass);
+
+
+smalltalk.addClass('TestServer', smalltalk.PlatanosServer, ['https', 'fs', 'credentials', 'url', 'path'], 'PlatanosServer');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "route:to:",
+category: 'not yet classified',
+fn: function (aJson,aResponce){
+var self=this;
+function $JSON(){return smalltalk.JSON||(typeof JSON=="undefined"?nil:JSON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+_st(console)._log_(_st($JSON())._stringify_(aJson));
+$1=_st(_st(aJson)._at_("request")).__eq("docGraph");
+if(smalltalk.assert($1)){
+var initNodes,direction,type;
+initNodes=_st(_st(aJson)._at_("data"))._at_("initNodes");
+initNodes;
+direction=_st(_st(aJson)._at_("data"))._at_("direction");
+direction;
+_st(console)._log_(_st("the direction is:").__comma(_st(direction)._asString()));
+type="text/html;charset=utf-8";
+type;
+$2=aResponce;
+_st($2)._writeHead_options_((200),smalltalk.HashedCollection._fromPairs_([_st("Content-Type").__minus_gt(type)]));
+_st($2)._write_(_st(_st(self)._testDocGraph_(direction))._asJSONString());
+$3=_st($2)._end();
+$3;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"route:to:",{aJson:aJson,aResponce:aResponce},smalltalk.TestServer)})},
+args: ["aJson", "aResponce"],
+source: "route: aJson to: aResponce \x0a \x0a console log: (JSON stringify: aJson).\x0a \x0a((aJson at: 'request') = 'docGraph')\x0aifTrue: [ |initNodes direction type|\x0a\x09initNodes := (aJson at:'data') at: 'initNodes'.\x0a\x09direction := (aJson at:'data') at: 'direction'.\x0a\x09\x0a\x09console log: 'the direction is:',(direction asString).\x0a\x09\x0a\x09type:='text/html;charset=utf-8'.\x0a\x09aResponce \x0a\x09\x09writeHead: 200 options:  #{'Content-Type' -> type};\x0a\x09\x09write: (self testDocGraph: direction) asJSONString;\x0a\x09\x09end.\x0a\x09\x09]",
+messageSends: ["log:", "stringify:", "ifTrue:", "at:", ",", "asString", "writeHead:options:", "->", "write:", "asJSONString", "testDocGraph:", "end", "="],
+referencedClasses: ["JSON"]
+}),
+smalltalk.TestServer);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "testDocGraph:",
+category: 'not yet classified',
+fn: function (direction){
+var self=this;
+var a;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Doc(){return smalltalk.Doc||(typeof Doc=="undefined"?nil:Doc)}
+function $HashedCollection(){return smalltalk.HashedCollection||(typeof HashedCollection=="undefined"?nil:HashedCollection)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$11,$12,$10,$14,$15,$13;
+a=_st($Array())._new();
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("1","first commit",_st($Array())._new()));
+$1=_st($Array())._new();
+_st($1)._add_("1");
+$2=_st($1)._yourself();
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("2","sec_commit",$2));
+$3=_st($Array())._new();
+_st($3)._add_("1");
+$4=_st($3)._yourself();
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("3","3rd commit fork",$4));
+$5=_st($Array())._new();
+_st($5)._add_("3");
+$6=_st($5)._yourself();
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("4","4rth commit",$6));
+$7=_st($Array())._new();
+_st($7)._add_("3");
+_st($7)._add_("2");
+$8=_st($7)._yourself();
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("5","5th commit merge",$8));
+_st(a)._add_(_st($Doc())._sha1_csummary_psha1_("6","6th commit new branch",_st($Array())._new()));
+$9=_st(direction).__eq((1));
+if(smalltalk.assert($9)){
+$11=_st($HashedCollection())._new();
+_st($11)._at_put_("ascendants",a);
+$12=_st($11)._yourself();
+$10=$12;
+return $10;
+} else {
+$14=_st($HashedCollection())._new();
+_st($14)._at_put_("descendants",a);
+$15=_st($14)._yourself();
+$13=$15;
+return $13;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"testDocGraph:",{direction:direction,a:a},smalltalk.TestServer)})},
+args: ["direction"],
+source: "testDocGraph: direction\x0a\x0a|a|\x0a\x0aa:= Array new.\x0aa add: (Doc sha1: '1' csummary: 'first commit' psha1: (Array new)).\x0aa add: (Doc sha1: '2' csummary: 'sec_commit' psha1: (Array new add:'1';yourself)).\x0aa add: (Doc sha1: '3' csummary: '3rd commit fork' psha1: (Array new add:'1'; yourself)).\x0aa add: (Doc sha1: '4' csummary: '4rth commit' psha1: (Array new add:'3';yourself)).\x0aa add: (Doc sha1: '5' csummary: '5th commit merge' psha1: (Array new add:'3'; add:'2';yourself)).\x0aa add: (Doc sha1: '6' csummary: '6th commit new branch' psha1: (Array new)).\x0a\x0a(direction = 1) ifTrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]\x0a\x09\x09\x09\x09\x09\x09ifFalse: [^ HashedCollection new at: 'descendants' put: a; yourself]",
+messageSends: ["new", "add:", "sha1:csummary:psha1:", "yourself", "ifTrue:ifFalse:", "at:put:", "="],
+referencedClasses: ["Array", "Doc", "HashedCollection"]
+}),
+smalltalk.TestServer);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "main",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._new())._start();
+return self}, function($ctx1) {$ctx1.fill(self,"main",{},smalltalk.TestServer.klass)})},
+args: [],
+source: "main\x0a\x0aself new start.",
+messageSends: ["start", "new"],
+referencedClasses: []
+}),
+smalltalk.TestServer.klass);
 
 

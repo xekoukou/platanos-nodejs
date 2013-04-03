@@ -116,6 +116,17 @@ respondJS: aFilename to: aResponse
 					end]]
 !
 
+respondJson: aJson to: aResponce
+
+|type|
+
+type:='text/html;charset=utf-8'.
+aResponce 
+	writeHead: 200 options:  #{'Content-Type' -> type};
+	write: (aJson stringify);
+	end
+!
+
 respondNotFoundTo: aResponse
 	aResponse 
 		writeHead: 404 options: #{'Content-Type' -> 'text/plain'};
@@ -136,6 +147,54 @@ route: aJson to: aResponce
 ! !
 
 !PlatanosServer class methodsFor: 'not yet classified'!
+
+main
+
+self new start.
+! !
+
+PlatanosServer subclass: #TestServer
+	instanceVariableNames: 'https fs credentials url path'
+	package: 'PlatanosServer'!
+
+!TestServer methodsFor: 'not yet classified'!
+
+route: aJson to: aResponce 
+ 
+ console log: (JSON stringify: aJson).
+ 
+((aJson at: 'request') = 'docGraph')
+ifTrue: [ |initNodes direction type|
+	initNodes := (aJson at:'data') at: 'initNodes'.
+	direction := (aJson at:'data') at: 'direction'.
+	
+	console log: 'the direction is:',(direction asString).
+	
+	type:='text/html;charset=utf-8'.
+	aResponce 
+		writeHead: 200 options:  #{'Content-Type' -> type};
+		write: (self testDocGraph: direction) asJSONString;
+		end.
+		]
+!
+
+testDocGraph: direction
+
+|a|
+
+a:= Array new.
+a add: (Doc sha1: '1' csummary: 'first commit' psha1: (Array new)).
+a add: (Doc sha1: '2' csummary: 'sec_commit' psha1: (Array new add:'1';yourself)).
+a add: (Doc sha1: '3' csummary: '3rd commit fork' psha1: (Array new add:'1'; yourself)).
+a add: (Doc sha1: '4' csummary: '4rth commit' psha1: (Array new add:'3';yourself)).
+a add: (Doc sha1: '5' csummary: '5th commit merge' psha1: (Array new add:'3'; add:'2';yourself)).
+a add: (Doc sha1: '6' csummary: '6th commit new branch' psha1: (Array new)).
+
+(direction = 1) ifTrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]
+						ifFalse: [^ HashedCollection new at: 'descendants' put: a; yourself]
+! !
+
+!TestServer class methodsFor: 'not yet classified'!
 
 main
 
