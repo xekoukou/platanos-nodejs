@@ -190,7 +190,7 @@ a add: (Doc sha1: '4' csummary: '4rth commit' psha1: (Array new add:'3';yourself
 a add: (Doc sha1: '5' csummary: '5th commit merge' psha1: (Array new add:'3'; add:'2';yourself)).
 a add: (Doc sha1: '6' csummary: '6th commit new branch' psha1: (Array new)).
 
-(direction = 1) ifTtrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]
+(direction = 1) ifTrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]
 						ifFalse: [^ HashedCollection new at: 'descendants' put: a; yourself]
 ! !
 

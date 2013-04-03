@@ -395,9 +395,7 @@ function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
 function $Doc(){return smalltalk.Doc||(typeof Doc=="undefined"?nil:Doc)}
 function $HashedCollection(){return smalltalk.HashedCollection||(typeof HashedCollection=="undefined"?nil:HashedCollection)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$5,$6,$7,$8,$10,$11,$9,$13,$14,$12;
-var $early={};
-try {
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$11,$12,$10,$14,$15,$13;
 a=_st($Array())._new();
 _st(a)._add_(_st($Doc())._sha1_csummary_psha1_("1","first commit",_st($Array())._new()));
 $1=_st($Array())._new();
@@ -418,27 +416,24 @@ _st($7)._add_("2");
 $8=_st($7)._yourself();
 _st(a)._add_(_st($Doc())._sha1_csummary_psha1_("5","5th commit merge",$8));
 _st(a)._add_(_st($Doc())._sha1_csummary_psha1_("6","6th commit new branch",_st($Array())._new()));
-_st(_st(direction).__eq((1)))._ifTtrue_ifFalse_((function(){
-return smalltalk.withContext(function($ctx2) {
-$10=_st($HashedCollection())._new();
-_st($10)._at_put_("ascendants",a);
-$11=_st($10)._yourself();
-$9=$11;
-throw $early=[$9];
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}),(function(){
-return smalltalk.withContext(function($ctx2) {
-$13=_st($HashedCollection())._new();
-_st($13)._at_put_("descendants",a);
-$14=_st($13)._yourself();
-$12=$14;
-throw $early=[$12];
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return self}
-catch(e) {if(e===$early)return e[0]; throw e}
-}, function($ctx1) {$ctx1.fill(self,"testDocGraph:",{direction:direction,a:a},smalltalk.TestServer)})},
+$9=_st(direction).__eq((1));
+if(smalltalk.assert($9)){
+$11=_st($HashedCollection())._new();
+_st($11)._at_put_("ascendants",a);
+$12=_st($11)._yourself();
+$10=$12;
+return $10;
+} else {
+$14=_st($HashedCollection())._new();
+_st($14)._at_put_("descendants",a);
+$15=_st($14)._yourself();
+$13=$15;
+return $13;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"testDocGraph:",{direction:direction,a:a},smalltalk.TestServer)})},
 args: ["direction"],
-source: "testDocGraph: direction\x0a\x0a|a|\x0a\x0aa:= Array new.\x0aa add: (Doc sha1: '1' csummary: 'first commit' psha1: (Array new)).\x0aa add: (Doc sha1: '2' csummary: 'sec_commit' psha1: (Array new add:'1';yourself)).\x0aa add: (Doc sha1: '3' csummary: '3rd commit fork' psha1: (Array new add:'1'; yourself)).\x0aa add: (Doc sha1: '4' csummary: '4rth commit' psha1: (Array new add:'3';yourself)).\x0aa add: (Doc sha1: '5' csummary: '5th commit merge' psha1: (Array new add:'3'; add:'2';yourself)).\x0aa add: (Doc sha1: '6' csummary: '6th commit new branch' psha1: (Array new)).\x0a\x0a(direction = 1) ifTtrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]\x0a\x09\x09\x09\x09\x09\x09ifFalse: [^ HashedCollection new at: 'descendants' put: a; yourself]",
-messageSends: ["new", "add:", "sha1:csummary:psha1:", "yourself", "ifTtrue:ifFalse:", "at:put:", "="],
+source: "testDocGraph: direction\x0a\x0a|a|\x0a\x0aa:= Array new.\x0aa add: (Doc sha1: '1' csummary: 'first commit' psha1: (Array new)).\x0aa add: (Doc sha1: '2' csummary: 'sec_commit' psha1: (Array new add:'1';yourself)).\x0aa add: (Doc sha1: '3' csummary: '3rd commit fork' psha1: (Array new add:'1'; yourself)).\x0aa add: (Doc sha1: '4' csummary: '4rth commit' psha1: (Array new add:'3';yourself)).\x0aa add: (Doc sha1: '5' csummary: '5th commit merge' psha1: (Array new add:'3'; add:'2';yourself)).\x0aa add: (Doc sha1: '6' csummary: '6th commit new branch' psha1: (Array new)).\x0a\x0a(direction = 1) ifTrue: [ ^ HashedCollection new at: 'ascendants' put: a; yourself]\x0a\x09\x09\x09\x09\x09\x09ifFalse: [^ HashedCollection new at: 'descendants' put: a; yourself]",
+messageSends: ["new", "add:", "sha1:csummary:psha1:", "yourself", "ifTrue:ifFalse:", "at:put:", "="],
 referencedClasses: ["Array", "Doc", "HashedCollection"]
 }),
 smalltalk.TestServer);
