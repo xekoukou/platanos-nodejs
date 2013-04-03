@@ -8,7 +8,7 @@ fn: function (aRequest,aResponse){
 var self=this;
 var uri,filename;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3;
+var $1,$2,$3,$4,$5,$6,$7;
 uri=_st(_st(self["@url"])._parse_(_st(aRequest)._url()))._pathname();
 _st(console)._log_(uri);
 $1=_st(_st(_st(uri).__eq("/index.html")).__or(_st(uri).__eq("/"))).__or(_st(uri).__eq(""));
@@ -23,22 +23,44 @@ return _st(self)._respondNotFoundTo_(aResponse);
 };
 }, function($ctx2) {$ctx2.fillBlock({aBoolean:aBoolean},$ctx1)})}));
 } else {
-filename=_st("./js/").__comma(_st(self["@path"])._basename_(uri));
+$3=_st(_st(".js").__eq(self["@path"]))._extname_(uri);
+if(smalltalk.assert($3)){
+filename=_st(self["@path"])._normalize_(uri);
 filename;
+_st(console)._log_at_(_st(self["@path"])._sep_(filename),(0));
+$4=_st(_st("packages").__eq(_st(self["@path"])._sep_(filename)))._at_((0));
+if(smalltalk.assert($4)){
 _st(self["@fs"])._exists_do_(filename,(function(aBoolean){
 return smalltalk.withContext(function($ctx2) {
-$3=aBoolean;
-if(smalltalk.assert($3)){
+$5=aBoolean;
+if(smalltalk.assert($5)){
 return _st(self)._respondJS_to_(filename,aResponse);
 } else {
 return _st(self)._respondNotFoundTo_(aResponse);
 };
 }, function($ctx2) {$ctx2.fillBlock({aBoolean:aBoolean},$ctx1)})}));
+} else {
+$6=_st(_st("js").__eq(_st(self["@path"])._sep_(filename)))._at_((0));
+if(smalltalk.assert($6)){
+_st(self["@fs"])._exists_do_(filename,(function(aBoolean){
+return smalltalk.withContext(function($ctx2) {
+$7=aBoolean;
+if(smalltalk.assert($7)){
+return _st(self)._respondJS_to_(filename,aResponse);
+} else {
+return _st(self)._respondNotFoundTo_(aResponse);
+};
+}, function($ctx2) {$ctx2.fillBlock({aBoolean:aBoolean},$ctx1)})}));
+} else {
+_st(console)._log_(_st("request with wrorng filename:").__comma(filename));
+};
+};
+};
 };
 return self}, function($ctx1) {$ctx1.fill(self,"handleGETRequest:respondTo:",{aRequest:aRequest,aResponse:aResponse,uri:uri,filename:filename},smalltalk.PlatanosServer)})},
 args: ["aRequest", "aResponse"],
-source: "handleGETRequest: aRequest respondTo: aResponse\x0a\x09| uri filename |\x0a\x09uri := (url parse: aRequest url) pathname.\x0a\x09console log: uri.\x0a\x09((uri = '/index.html') | (uri = '/') | (uri = ''))\x0a\x09\x09ifTrue: [\x0a\x09\x09fs exists: './index.html' do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondIndex: aResponse]]\x0a\x09\x09\x09\x09]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09 filename := './js/',(path basename: uri).\x0a\x09\x09\x09 fs exists: filename do: [:aBoolean |\x0a\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondJS: filename to: aResponse]]\x0a\x09\x09\x09\x09\x0a\x09\x09\x09] ",
-messageSends: ["pathname", "parse:", "url", "log:", "ifTrue:ifFalse:", "exists:do:", "ifFalse:ifTrue:", "respondNotFoundTo:", "respondIndex:", ",", "basename:", "respondJS:to:", "|", "="],
+source: "handleGETRequest: aRequest respondTo: aResponse\x0a\x0a| uri filename |\x0a\x0auri := (url parse: aRequest url) pathname.\x0aconsole log: uri.\x0a((uri = '/index.html') | (uri = '/') | (uri = ''))\x0aifTrue: [\x0a\x09fs exists: './index.html' do: [:aBoolean |\x0a\x09\x09aBoolean\x0a\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09ifTrue: [self respondIndex: aResponse].\x0a\x09]\x0a]\x0aifFalse: [\x0a\x09('.js' = path extname:uri)\x0a\x09ifTrue:[\x0a\x09\x09filename := path normalize: uri.\x0a\x09\x09console log: (path sep: filename) at: 0.\x0a\x09\x09('packages' = (path sep: filename) at: 0)\x0a\x09\x09ifTrue:[\x0a \x09\x09\x09fs exists: filename do: [:aBoolean |\x0a\x09\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09ifTrue: [self respondJS: filename to: aResponse].\x0a\x09\x09\x09].\x0a\x09\x09]\x0a    \x09ifFalse:[\x0a\x09\x09\x09('js' = (path sep: filename) at: 0)\x0a\x09\x09\x09ifTrue:[\x0a\x09\x09\x09\x09fs exists: filename do: [:aBoolean |\x09\x0a\x09\x09\x09\x09\x09aBoolean\x0a\x09\x09\x09\x09\x09ifFalse: [self respondNotFoundTo: aResponse]\x0a\x09\x09\x09\x09\x09ifTrue: [self respondJS: filename to: aResponse].\x0a\x09\x09\x09\x09]\x0a\x09\x09\x09]\x0a\x09\x09\x09ifFalse:[console log: ('request with wrorng filename:',filename)].\x0a\x09\x09]\x0a\x09]\x0a]",
+messageSends: ["pathname", "parse:", "url", "log:", "ifTrue:ifFalse:", "exists:do:", "ifFalse:ifTrue:", "respondNotFoundTo:", "respondIndex:", "ifTrue:", "normalize:", "log:at:", "sep:", "respondJS:to:", ",", "at:", "=", "extname:", "|"],
 referencedClasses: []
 }),
 smalltalk.PlatanosServer);

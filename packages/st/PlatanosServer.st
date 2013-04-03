@@ -41,24 +41,45 @@ server listen: 8000.
 !PlatanosServer methodsFor: 'request handling'!
 
 handleGETRequest: aRequest respondTo: aResponse
-	| uri filename |
-	uri := (url parse: aRequest url) pathname.
-	console log: uri.
-	((uri = '/index.html') | (uri = '/') | (uri = ''))
-		ifTrue: [
-		fs exists: './index.html' do: [:aBoolean |
-			aBoolean
+
+| uri filename |
+
+uri := (url parse: aRequest url) pathname.
+console log: uri.
+((uri = '/index.html') | (uri = '/') | (uri = ''))
+ifTrue: [
+	fs exists: './index.html' do: [:aBoolean |
+		aBoolean
+		ifFalse: [self respondNotFoundTo: aResponse]
+		ifTrue: [self respondIndex: aResponse].
+	]
+]
+ifFalse: [
+	('.js' = path extname:uri)
+	ifTrue:[
+		filename := path normalize: uri.
+		console log: (path sep: filename) at: 0.
+		('packages' = (path sep: filename) at: 0)
+		ifTrue:[
+ 			fs exists: filename do: [:aBoolean |
+				aBoolean
 				ifFalse: [self respondNotFoundTo: aResponse]
-				ifTrue: [self respondIndex: aResponse]]
+				ifTrue: [self respondJS: filename to: aResponse].
+			].
+		]
+    	ifFalse:[
+			('js' = (path sep: filename) at: 0)
+			ifTrue:[
+				fs exists: filename do: [:aBoolean |	
+					aBoolean
+					ifFalse: [self respondNotFoundTo: aResponse]
+					ifTrue: [self respondJS: filename to: aResponse].
 				]
-		ifFalse: [
-			 filename := './js/',(path basename: uri).
-			 fs exists: filename do: [:aBoolean |
-			aBoolean
-				ifFalse: [self respondNotFoundTo: aResponse]
-				ifTrue: [self respondJS: filename to: aResponse]]
-				
 			]
+			ifFalse:[console log: ('request with wrorng filename:',filename)].
+		]
+	]
+]
 !
 
 handleRequest: aRequest respondTo: aResponse
