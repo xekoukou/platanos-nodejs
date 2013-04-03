@@ -54,17 +54,18 @@ var $1,$2;
 $1=_st(_st(aRequest)._method()).__eq("POST");
 if(smalltalk.assert($1)){
 _st(self)._respondTo_with_(aRequest,aResponse);
-};
+} else {
 $2=_st(_st(aRequest)._method()).__eq("GET");
 if(smalltalk.assert($2)){
 _st(self)._handleGETRequest_respondTo_(aRequest,aResponse);
 } else {
 _st(console)._log_("no get or post");
 };
+};
 return self}, function($ctx1) {$ctx1.fill(self,"handleRequest:respondTo:",{aRequest:aRequest,aResponse:aResponse},smalltalk.PlatanosServer)})},
 args: ["aRequest", "aResponse"],
-source: "handleRequest: aRequest respondTo: aResponse\x0a\x09aRequest method = 'POST'\x0a\x09\x09ifTrue: [self  respondTo: aRequest with: aResponse].\x0a\x09aRequest method = 'GET'\x0a\x09\x09ifTrue:[self handleGETRequest: aRequest respondTo: aResponse]\x0a\x09\x09ifFalse:[console log:'no get or post'].",
-messageSends: ["ifTrue:", "respondTo:with:", "=", "method", "ifTrue:ifFalse:", "handleGETRequest:respondTo:", "log:"],
+source: "handleRequest: aRequest respondTo: aResponse\x0a\x09aRequest method = 'POST'\x0a\x09ifTrue: [\x0a\x09\x09self  respondTo: aRequest with: aResponse]\x0a\x09ifFalse:[\x0a\x09\x09aRequest method = 'GET'\x0a\x09\x09ifTrue:[\x0a\x09\x09\x09self handleGETRequest: aRequest respondTo: aResponse]\x0a\x09\x09ifFalse:[\x0a\x09\x09\x09console log:'no get or post'].].",
+messageSends: ["ifTrue:ifFalse:", "respondTo:with:", "handleGETRequest:respondTo:", "log:", "=", "method"],
 referencedClasses: []
 }),
 smalltalk.PlatanosServer);

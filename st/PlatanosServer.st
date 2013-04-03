@@ -63,10 +63,14 @@ handleGETRequest: aRequest respondTo: aResponse
 
 handleRequest: aRequest respondTo: aResponse
 	aRequest method = 'POST'
-		ifTrue: [self  respondTo: aRequest with: aResponse].
-	aRequest method = 'GET'
-		ifTrue:[self handleGETRequest: aRequest respondTo: aResponse]
-		ifFalse:[console log:'no get or post'].
+	ifTrue: [
+		self  respondTo: aRequest with: aResponse]
+	ifFalse:[
+		aRequest method = 'GET'
+		ifTrue:[
+			self handleGETRequest: aRequest respondTo: aResponse]
+		ifFalse:[
+			console log:'no get or post'].].
 !
 
 respondIndex: aResponse
