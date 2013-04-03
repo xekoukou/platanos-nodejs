@@ -356,9 +356,11 @@ selector: "route:to:",
 category: 'not yet classified',
 fn: function (aJson,aResponce){
 var self=this;
+function $JSON(){return smalltalk.JSON||(typeof JSON=="undefined"?nil:JSON)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3;
-$1=_st(aJson)._at_(_st("request").__eq("docGraph"));
+_st(console)._log_(_st($JSON())._stringify_(aJson));
+$1=_st(_st(aJson)._at_("request")).__eq("docGraph");
 if(smalltalk.assert($1)){
 var initNodes,direction,type;
 initNodes=_st(_st(aJson)._at_("data"))._at_("initNodes");
@@ -370,15 +372,15 @@ type="text/html;charset=utf-8";
 type;
 $2=aResponce;
 _st($2)._writeHead_options_((200),smalltalk.HashedCollection._fromPairs_([_st("Content-Type").__minus_gt(type)]));
-_st($2)._write_(_st(_st(self)._testDocGraph())._asJSONString());
+_st($2)._write_(_st(_st(self)._testDocGraph_(direction))._asJSONString());
 $3=_st($2)._end();
 $3;
 };
 return self}, function($ctx1) {$ctx1.fill(self,"route:to:",{aJson:aJson,aResponce:aResponce},smalltalk.TestServer)})},
 args: ["aJson", "aResponce"],
-source: "route: aJson to: aResponce \x0a \x0a(aJson at: 'request' = 'docGraph')\x0a\x09ifTrue: [ |initNodes direction type|\x0a\x09\x09initNodes := (aJson at:'data') at: 'initNodes'.\x0a\x09\x09direction := (aJson at:'data') at: 'direction'.\x0a\x09\x09\x0a\x09\x09console log: 'the direction is:',(direction asString).\x0a\x09\x09\x0a\x09\x09type:='text/html;charset=utf-8'.\x0a\x09\x09\x09\x09aResponce \x0a\x09\x09\x09\x09\x09writeHead: 200 options:  #{'Content-Type' -> type};\x0a\x09\x09\x09\x09\x09write: self testDocGraph asJSONString;\x0a\x09\x09\x09\x09\x09end.\x0a\x09\x09\x0a\x09\x09\x0a\x09\x09]",
-messageSends: ["ifTrue:", "at:", "log:", ",", "asString", "writeHead:options:", "->", "write:", "asJSONString", "testDocGraph", "end", "="],
-referencedClasses: []
+source: "route: aJson to: aResponce \x0a \x0a console log: (JSON stringify: aJson).\x0a \x0a((aJson at: 'request') = 'docGraph')\x0aifTrue: [ |initNodes direction type|\x0a\x09initNodes := (aJson at:'data') at: 'initNodes'.\x0a\x09direction := (aJson at:'data') at: 'direction'.\x0a\x09\x0a\x09console log: 'the direction is:',(direction asString).\x0a\x09\x0a\x09type:='text/html;charset=utf-8'.\x0a\x09aResponce \x0a\x09\x09writeHead: 200 options:  #{'Content-Type' -> type};\x0a\x09\x09write: (self testDocGraph: direction) asJSONString;\x0a\x09\x09end.\x0a\x09\x09]",
+messageSends: ["log:", "stringify:", "ifTrue:", "at:", ",", "asString", "writeHead:options:", "->", "write:", "asJSONString", "testDocGraph:", "end", "="],
+referencedClasses: ["JSON"]
 }),
 smalltalk.TestServer);
 

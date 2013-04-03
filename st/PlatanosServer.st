@@ -161,20 +161,20 @@ PlatanosServer subclass: #TestServer
 
 route: aJson to: aResponce 
  
-(aJson at: 'request' = 'docGraph')
-	ifTrue: [ |initNodes direction type|
-		initNodes := (aJson at:'data') at: 'initNodes'.
-		direction := (aJson at:'data') at: 'direction'.
-		
-		console log: 'the direction is:',(direction asString).
-		
-		type:='text/html;charset=utf-8'.
-				aResponce 
-					writeHead: 200 options:  #{'Content-Type' -> type};
-					write: self testDocGraph asJSONString;
-					end.
-		
-		
+ console log: (JSON stringify: aJson).
+ 
+((aJson at: 'request') = 'docGraph')
+ifTrue: [ |initNodes direction type|
+	initNodes := (aJson at:'data') at: 'initNodes'.
+	direction := (aJson at:'data') at: 'direction'.
+	
+	console log: 'the direction is:',(direction asString).
+	
+	type:='text/html;charset=utf-8'.
+	aResponce 
+		writeHead: 200 options:  #{'Content-Type' -> type};
+		write: (self testDocGraph: direction) asJSONString;
+		end.
 		]
 !
 
