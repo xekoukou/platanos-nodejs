@@ -45,7 +45,7 @@ handleGETRequest: aRequest respondTo: aResponse
 | uri filename |
 
 uri := (url parse: aRequest url) pathname.
-console log: uri.
+console log: ('uri is:',uri).
 ((uri = '/index.html') | (uri = '/') | (uri = ''))
 ifTrue: [
 	fs exists: './index.html' do: [:aBoolean |
@@ -55,11 +55,14 @@ ifTrue: [
 	]
 ]
 ifFalse: [
-	('.js' = path extname:uri)
+	('.js' = (path extname:uri))
 	ifTrue:[
+		|sep|
 		filename := path normalize: uri.
-		console log: (path sep: filename) at: 0.
-		('packages' = (path sep: filename) at: 0)
+		console log: ('filename is:',filename).
+		sep :=(filename split:(path sep)) at: 1.
+		console log: sep.
+		('packages' = sep)
 		ifTrue:[
  			fs exists: filename do: [:aBoolean |
 				aBoolean
@@ -68,7 +71,7 @@ ifFalse: [
 			].
 		]
     	ifFalse:[
-			('js' = (path sep: filename) at: 0)
+			('js' = sep)
 			ifTrue:[
 				fs exists: filename do: [:aBoolean |	
 					aBoolean
