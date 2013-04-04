@@ -1513,6 +1513,20 @@ smalltalk.Environment);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "allSelectors",
+fn: function (){
+var self=this;
+function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st($Smalltalk())._current())._at_("allSelectors"))._value();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"allSelectors",{},smalltalk.Environment)})},
+messageSends: ["value", "at:", "current"]}),
+smalltalk.Environment);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "availableClassNames",
 fn: function (){
 var self=this;
@@ -1597,6 +1611,20 @@ $1=$2;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"classNamed:",{aString:aString},smalltalk.HLEnvironment)})},
 messageSends: ["ifNil:", "error:", "at:", "asSymbol", "current"]}),
+smalltalk.Environment);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "classes",
+fn: function (){
+var self=this;
+function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($Smalltalk())._current())._classes();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"classes",{},smalltalk.Environment)})},
+messageSends: ["classes", "current"]}),
 smalltalk.Environment);
 
 smalltalk.addMethod(

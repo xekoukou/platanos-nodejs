@@ -2438,7 +2438,8 @@ fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 
-		if(! aString._isString || ! aString._isString()) {
+		if(typeof aString === 'undefined') { return false }
+		if(!aString._isString || ! aString._isString()) {
 			return false;
 		}
 		return String(self) === String(aString)
@@ -2995,6 +2996,17 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 return self.length;
 return self}, function($ctx1) {$ctx1.fill(self,"size",{},smalltalk.String)})},
+messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "split:",
+fn: function (aChar){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self.split(aChar);
+return self}, function($ctx1) {$ctx1.fill(self,"split:",{aChar:aChar},smalltalk.String)})},
 messageSends: []}),
 smalltalk.String);
 

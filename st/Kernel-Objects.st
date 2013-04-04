@@ -667,6 +667,10 @@ Abstract class defining common behavior for local and remote environments!
 
 !Environment methodsFor: 'accessing'!
 
+allSelectors
+	^ (Smalltalk current at: 'allSelectors') value
+!
+
 availableClassNames
 	^ Smalltalk current classes 
 		collect: [ :each | each name ]
@@ -692,6 +696,10 @@ classBuilder
 classNamed: aString
 	^ (Smalltalk current at: aString asSymbol)
 		ifNil: [ self error: 'Invalid class name' ]
+!
+
+classes
+	^ Smalltalk current classes
 !
 
 packages

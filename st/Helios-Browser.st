@@ -518,8 +518,8 @@ selectorsCache
 !
 
 selectorsInProtocol: aString
-	^ (self methodsInProtocol: aString)
-    	collect: [ :each | each selector ]
+	^ ((self methodsInProtocol: aString)
+    	collect: [ :each | each selector ]) sorted
 ! !
 
 !HLMethodsListWidget methodsFor: 'actions'!
@@ -703,6 +703,12 @@ observeModel
 		do: [ :ann | self onPackagesFocusRequested ]
 !
 
+observeSystem
+    self model systemAnnouncer 
+		on: ClassAdded 
+		do: [ :ann | self onClassAdded: ann theClass ]
+!
+
 selectItem: aPackage
 	self model selectedPackage: aPackage
 ! !
@@ -715,6 +721,15 @@ initializeItems
 ! !
 
 !HLPackagesListWidget methodsFor: 'reactions'!
+
+onClassAdded: aClass
+	"Amber doesn't have yet a global organizer for packages"
+	
+	(self items includes: aClass package) ifFalse: [ 
+		self 
+			initializeItems;
+			refresh ]
+!
 
 onPackageSelected: aPackage
 	self selectedItem: aPackage.
@@ -856,14 +871,14 @@ renderContentOn: html
       	ifTrue: [ super renderContentOn: html ]
 ! !
 
-Object subclass: #HLBrowserModel
-	instanceVariableNames: 'announcer environment selectedPackage selectedClass selectedProtocol selectedSelector showInstance showComment'
+HLModel subclass: #HLBrowserModel
+	instanceVariableNames: 'selectedPackage selectedClass selectedProtocol selectedSelector showInstance showComment'
 	package: 'Helios-Browser'!
 
 !HLBrowserModel methodsFor: 'accessing'!
 
-announcer
-	^ announcer ifNil: [ announcer := Announcer new ]
+allSelectors
+	^ self environment allSelectors
 !
 
 availableClassNames
@@ -882,22 +897,10 @@ availableProtocols
 	^ self environment availableProtocolsFor: self selectedClass
 !
 
-environment
-	^ environment ifNil: [ HLManager current environment ]
-!
-
-environment: anEnvironment
-	environment := anEnvironment
-!
-
 handleUnkownVariableError: anError
 	self announcer announce: (HLUnknownVariableErrorRaised new
 		error: anError;
 		yourself)
-!
-
-manager
-	^ HLManager current
 !
 
 packages
@@ -990,10 +993,6 @@ showInstance: aBoolean
     	  	ifFalse: [ self selectedClass theMetaClass ]) ].
     
     self announcer announce: HLShowInstanceToggled new
-!
-
-systemAnnouncer
-	^ self environment systemAnnouncer
 ! !
 
 !HLBrowserModel methodsFor: 'actions'!

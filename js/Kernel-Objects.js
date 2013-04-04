@@ -2117,6 +2117,25 @@ smalltalk.Environment);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "allSelectors",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st($Smalltalk())._current())._at_("allSelectors"))._value();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"allSelectors",{},smalltalk.Environment)})},
+args: [],
+source: "allSelectors\x0a\x09^ (Smalltalk current at: 'allSelectors') value",
+messageSends: ["value", "at:", "current"],
+referencedClasses: ["Smalltalk"]
+}),
+smalltalk.Environment);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "availableClassNames",
 category: 'accessing',
 fn: function (){
@@ -2224,6 +2243,25 @@ return $1;
 args: ["aString"],
 source: "classNamed: aString\x0a\x09^ (Smalltalk current at: aString asSymbol)\x0a\x09\x09ifNil: [ self error: 'Invalid class name' ]",
 messageSends: ["ifNil:", "error:", "at:", "asSymbol", "current"],
+referencedClasses: ["Smalltalk"]
+}),
+smalltalk.Environment);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "classes",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($Smalltalk())._current())._classes();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"classes",{},smalltalk.Environment)})},
+args: [],
+source: "classes\x0a\x09^ Smalltalk current classes",
+messageSends: ["classes", "current"],
 referencedClasses: ["Smalltalk"]
 }),
 smalltalk.Environment);
