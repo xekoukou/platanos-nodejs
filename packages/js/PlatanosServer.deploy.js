@@ -43,7 +43,7 @@ return _st(self)._respondNotFoundTo_(aResponse);
 };
 }, function($ctx2) {$ctx2.fillBlock({aBoolean:aBoolean},$ctx1)})}));
 } else {
-$6=_st("js").__eq(sep);
+$6=_st("amber").__eq(sep);
 if(smalltalk.assert($6)){
 _st(self["@fs"])._exists_do_(filename,(function(aBoolean){
 return smalltalk.withContext(function($ctx2) {

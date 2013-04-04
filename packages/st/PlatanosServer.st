@@ -71,7 +71,7 @@ ifFalse: [
 			].
 		]
     	ifFalse:[
-			('js' = sep)
+			('amber' = sep)
 			ifTrue:[
 				fs exists: filename do: [:aBoolean |	
 					aBoolean
